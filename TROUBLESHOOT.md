@@ -40,3 +40,46 @@ Solution:
 sudo swapoff -a
 strace -eopenat kubectl version
 ```
+
+## Follow these step for each node to permanently fix above issues
+
+Create a script
+
+```sh
+/home/vagrant/node_startup_fix.sh
+```
+
+Add the following commands to node_startup_fix.sh
+
+```sh
+#!/bin/sh
+sudo swapoff -a
+strace -eopenat kubectl version
+```
+
+Change node_startup_fix.sh to execute mode
+
+```sh
+chmod +x node_startup_fix.sh
+```
+
+Add commands to /etc/rc.local
+
+```sh
+sudo vi /etc/rc.local
+```
+
+with content like the following:
+
+```sh
+#!/bin/sh
+# This script is executed at the end of each multiuser runlevel
+/home/vagrant/node_startup_fix.sh || exit 1
+exit 0
+```
+
+Change /etc/rc.local to execute mode
+
+```sh
+sudo chmod +x /etc/rc.local
+```
